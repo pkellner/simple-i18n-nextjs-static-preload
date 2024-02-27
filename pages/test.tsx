@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRouter} from "next/router";
-import {Locale} from "next/dist/compiled/@vercel/og/satori";
+
 
 const translations = {
   en: {
@@ -21,16 +21,23 @@ export async function getStaticProps({ locale } : { locale: string }) {
   return {
     props: {
       allTranslations: translations, // Pass all translations to the page
-      locale,
+      locale, // this is from build system
     },
   };
 }
 
 export default function Home({ allTranslations, locale } : { allTranslations: any, locale: string }) {
-  const router = useRouter();
   const [language, setLanguage] = useState<string>(locale); // Initialize with the current locale
+  const { locale: browserLocale } = useRouter();
 
-  console.log("pages/index.tsx: locale:", locale)
+  const [showResult, setShowResult] = useState(false);
+  useEffect(() => {
+    console.log("pages/index.tsx: useEffect: locale:", locale, "browserLocale:", browserLocale);
+    setLanguage(browserLocale ?? locale);
+    setShowResult(true);
+  })
+
+  console.log("pages/index.tsx: locale:", language)
 
   const toggleLocale = () => {
     setLanguage(locale === 'en' ? 'es' : 'en'); // shouldn't need this
