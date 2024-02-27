@@ -35,18 +35,19 @@ export default function Home({ allTranslations, locale } : { allTranslations: an
     console.log("pages/index.tsx: useEffect: locale:", locale, "browserLocale:", browserLocale);
     setLanguage(browserLocale ?? locale);
     setShowResult(true);
-  })
+  },[])
 
   console.log("pages/index.tsx: locale:", language)
 
   const toggleLocale = () => {
-    setLanguage(locale === 'en' ? 'es' : 'en'); // shouldn't need this
+    const newLocale = language === "en" ? "es" : "en";
+    setLanguage(newLocale);
   };
 
   // Access the current translations based on the locale
-  const content = allTranslations[locale];
+  const content = allTranslations[language];
 
-  return (
+  return showResult && (
     <div>
       <h1>{content.greeting}</h1>
       <p>{content.content}</p>
